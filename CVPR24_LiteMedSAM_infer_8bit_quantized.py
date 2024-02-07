@@ -367,12 +367,10 @@ medsam_lite_model = MedSAM_Lite(
 
 lite_medsam_checkpoint = torch.load(lite_medsam_checkpoint_path, map_location='cpu')
 medsam_lite_model.load_state_dict(lite_medsam_checkpoint)
-medsam_lite_model.to(device)
-medsam_lite_model.eval()
 
 import torch
 from torch.ao.quantization import quantize_dynamic
-# Apply dynamic quantization with the same settings used originally
+
 medsam_lite_model = quantize_dynamic(
     medsam_lite_model,
     {torch.nn.Linear},  # Specify the layer types you originally quantized
@@ -380,10 +378,7 @@ medsam_lite_model = quantize_dynamic(
 )
 medsam_lite_model.to(device)
 medsam_lite_model.eval()
-# Load the state dictionary into the quantized model
-#state_dict = torch.load("/content/drive/MyDrive/challenge_medsam/MedSAM_fast/work_dir/LiteMedSAM/quant8.pth")
-#quantized_model.load_state_dict(state_dict)
-#medsam_lite_model=quantized_model
+
 
 def MedSAM_infer_npz_2D(img_npz_file):
     npz_name = basename(img_npz_file)
