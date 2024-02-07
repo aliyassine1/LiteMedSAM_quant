@@ -14,8 +14,9 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.utils.checkpoint as checkpoint
-from timm.models.layers import DropPath as TimmDropPath,\
-    to_2tuple, trunc_normal_
+from timm.layers.drop import DropPath
+from timm.layers.weight_init import trunc_normal_
+from timm.layers.helpers import to_2tuple, to_4tuple
 from timm.models.registry import register_model
 from typing import Tuple
 
@@ -45,7 +46,7 @@ class Conv2d_BN(torch.nn.Sequential):
         return m
 
 
-class DropPath(TimmDropPath):
+class DropPath():
     def __init__(self, drop_prob=None):
         super().__init__(drop_prob=drop_prob)
         self.drop_prob = drop_prob
